@@ -1,7 +1,7 @@
 import { createHmac, createHash, timingSafeEqual } from "node:crypto";
+import { realpathSync } from "node:fs";
 import { createServer } from "node:http";
-import { fileURLToPath, pathToFileURL } from "node:url";
-import { resolve as resolvePath } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const HOST = process.env.HOST || "127.0.0.1";
 const PORT = Number(process.env.PORT || 8787);
@@ -45,9 +45,9 @@ const isDirectRun = (() => {
   }
 
   try {
-    return fileURLToPath(import.meta.url) === resolvePath(process.argv[1]);
+    return realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1]);
   } catch {
-    return import.meta.url === pathToFileURL(process.argv[1]).href;
+    return false;
   }
 })();
 
