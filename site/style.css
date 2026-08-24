@@ -22,6 +22,10 @@ body {
   color: var(--pixel-ink);
 }
 
+input, select, textarea {
+  font-size: 16px;
+}
+
 .shell {
   min-height: 100vh;
   min-height: 100dvh;
@@ -64,14 +68,14 @@ h1 {
   letter-spacing: 1.4px;
 }
 
-p,
+/* p,
 label,
 a,
 button,
 input {
   font-size: clamp(10px, 1.7vw, 12px);
   line-height: 1.8;
-}
+} */
 
 form {
   margin-top: 2px;
