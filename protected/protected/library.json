@@ -1,0 +1,5 @@
+{
+  "title": "Protected Library",
+  "status": "ok",
+  "source": "local docker protected-origin"
+}
