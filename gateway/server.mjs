@@ -1,5 +1,7 @@
 import { createHmac, createHash, timingSafeEqual } from "node:crypto";
 import { createServer } from "node:http";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { resolve as resolvePath } from "node:path";
 
 const HOST = process.env.HOST || "127.0.0.1";
 const PORT = Number(process.env.PORT || 8787);
@@ -9,20 +11,13 @@ const COOKIE_SECURE = process.env.COOKIE_SECURE !== "false";
 const {
   TOKEN_SIGNING_KEY,
   PASSPHRASE_HASH,
+  PASSPHRASE_WORDLIST,
   PROTECTED_ORIGIN,
   STRAPI_VERIFY_URL,
   STRAPI_VERIFY_TOKEN
 } = process.env;
 
-if (!TOKEN_SIGNING_KEY) {
-  throw new Error("Missing TOKEN_SIGNING_KEY");
-}
-
-if (!PROTECTED_ORIGIN) {
-  throw new Error("Missing PROTECTED_ORIGIN");
-}
-
-const originBase = new URL(PROTECTED_ORIGIN);
+const originBase = PROTECTED_ORIGIN ? new URL(PROTECTED_ORIGIN) : null;
 
 const server = createServer(async (req, res) => {
   try {
@@ -44,9 +39,31 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, HOST, () => {
-  process.stdout.write(`Gateway listening on ${HOST}:${PORT}\n`);
-});
+const isDirectRun = (() => {
+  if (!process.argv[1]) {
+    return false;
+  }
+
+  try {
+    return fileURLToPath(import.meta.url) === resolvePath(process.argv[1]);
+  } catch {
+    return import.meta.url === pathToFileURL(process.argv[1]).href;
+  }
+})();
+
+if (isDirectRun) {
+  if (!TOKEN_SIGNING_KEY) {
+    throw new Error("Missing TOKEN_SIGNING_KEY");
+  }
+
+  if (!PROTECTED_ORIGIN) {
+    throw new Error("Missing PROTECTED_ORIGIN");
+  }
+
+  server.listen(PORT, HOST, () => {
+    process.stdout.write(`Gateway listening on ${HOST}:${PORT}\n`);
+  });
+}
 
 async function handleUnlock(req, res) {
   const bodyText = await readBody(req);
@@ -91,28 +108,54 @@ async function handleProtected(req, res, url) {
   res.end(bodyBuffer);
 }
 
-async function verifyPassphrase(passphrase) {
-  if (STRAPI_VERIFY_URL) {
+export function parsePassphraseWordList(wordListValue) {
+  if (!wordListValue) {
+    return [];
+  }
+
+  return Array.from(new Set(
+    String(wordListValue)
+      .split(/[\n,]+/)
+      .map((word) => word.trim().toLowerCase())
+      .filter(Boolean)
+  ));
+}
+
+export async function verifyPassphrase(passphrase, env = process.env) {
+  const normalizedPassphrase = String(passphrase || "").trim();
+  const {
+    STRAPI_VERIFY_URL: strapiVerifyUrl,
+    STRAPI_VERIFY_TOKEN: strapiVerifyToken,
+    PASSPHRASE_HASH: passphraseHash,
+    PASSPHRASE_WORDLIST: passphraseWordList
+  } = env;
+
+  if (strapiVerifyUrl) {
     const headers = { "content-type": "application/json" };
-    if (STRAPI_VERIFY_TOKEN) {
-      headers.authorization = `Bearer ${STRAPI_VERIFY_TOKEN}`;
+    if (strapiVerifyToken) {
+      headers.authorization = `Bearer ${strapiVerifyToken}`;
     }
 
-    const response = await fetch(STRAPI_VERIFY_URL, {
+    const response = await fetch(strapiVerifyUrl, {
       method: "POST",
       headers,
-      body: JSON.stringify({ passphrase })
+      body: JSON.stringify({ passphrase: normalizedPassphrase })
     });
 
     return response.ok;
   }
 
-  if (!PASSPHRASE_HASH) {
+  const allowedWords = parsePassphraseWordList(passphraseWordList);
+  if (allowedWords.length > 0) {
+    return allowedWords.includes(normalizedPassphrase.toLowerCase());
+  }
+
+  if (!passphraseHash) {
     return false;
   }
 
-  const hash = sha256Base64Url(passphrase);
-  return safeEqual(hash, PASSPHRASE_HASH);
+  const hash = sha256Base64Url(normalizedPassphrase);
+  return safeEqual(hash, passphraseHash);
 }
 
 function verifyToken(token) {

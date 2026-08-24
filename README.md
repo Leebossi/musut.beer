@@ -25,6 +25,14 @@ Open `http://localhost:8080` unless you changed `WEB_PORT`.
 
 Use `devpass`.
 
+To allow a wordlist instead of a single hash, set `PASSPHRASE_WORDLIST` to a comma- or newline-delimited list such as:
+
+```bash
+PASSPHRASE_WORDLIST="alpha, beta, gamma"
+```
+
+Then any one of those words will unlock the site.
+
 ### Test endpoints
 
 - Public page: `http://localhost:8080/`
