@@ -1,5 +1,7 @@
 # musut.beer
 
+[![Deploy site and gateway to VPS](https://github.com/Leebossi/musut.beer/actions/workflows/deploy-vps.yml/badge.svg)](https://github.com/Leebossi/musut.beer/actions/workflows/deploy-vps.yml)
+
 Vanilla static site with VPS-ready Nginx + Node auth gateway.
 
 ## Docker Development
