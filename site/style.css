@@ -1,0 +1,180 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+:root {
+  --pixel-ink: #0f0f10;
+  --pixel-paper: #f3f3f3;
+  --pixel-panel: #d9d9d9;
+  --pixel-shadow: #727272;
+  --pixel-accent: #ff5e2b;
+  --pixel-accent-dark: #b53a16;
+  --pixel-ok: #8a8a8a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: "Press Start 2P", "Courier New", monospace;
+  color: var(--pixel-ink);
+}
+
+.shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  padding: clamp(12px, 4vw, 24px);
+  position: relative;
+  z-index: 1;
+}
+
+.auth-card {
+  width: min(560px, calc(100vw - 24px));
+  display: grid;
+  gap: 14px;
+  border: 5px solid var(--pixel-ink);
+  border-radius: 0;
+  padding: clamp(14px, 4vw, 24px);
+  box-shadow:
+    0 0 0 5px var(--pixel-paper),
+    14px 14px 0 0 var(--pixel-ink);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-hero {
+  width: 100%;
+  display: block;
+  border: 4px solid var(--pixel-ink);
+  image-rendering: pixelated;
+  background: var(--pixel-panel);
+  box-shadow: 6px 6px 0 0 var(--pixel-shadow);
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(15px, 2.4vw, 22px);
+  line-height: 1.35;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+}
+
+p,
+label,
+a,
+button,
+input {
+  font-size: clamp(10px, 1.7vw, 12px);
+  line-height: 1.8;
+}
+
+form {
+  margin-top: 2px;
+  display: grid;
+  gap: 12px;
+}
+
+input {
+  width: 100%;
+  border: 4px solid var(--pixel-ink);
+  border-radius: 0;
+  padding: 11px;
+  color: var(--pixel-ink);
+  background: var(--pixel-paper);
+  outline: none;
+  box-shadow: 6px 6px 0 0 var(--pixel-shadow);
+}
+
+input:focus {
+  box-shadow:
+    6px 6px 0 0 var(--pixel-shadow),
+    0 0 0 3px var(--pixel-ok);
+}
+
+button {
+  border: 4px solid var(--pixel-ink);
+  border-radius: 0;
+  padding: 11px 14px;
+  color: #ffffff;
+  background: var(--pixel-accent);
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 6px 6px 0 0 var(--pixel-ink);
+}
+
+button:active {
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0 0 var(--pixel-ink);
+}
+
+#status {
+  min-height: 1.8em;
+  margin-top: 12px;
+}
+
+#protected-link {
+  display: inline-block;
+  margin-top: 4px;
+  color: var(--pixel-ink);
+  text-decoration-thickness: 4px;
+  text-underline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  body.auth-view {
+    background-position: center top;
+  }
+
+  .shell {
+    align-items: end;
+    padding: 12px;
+  }
+
+  .auth-card {
+    width: min(100%, calc(100vw - 20px));
+    gap: 12px;
+    padding: 14px;
+    box-shadow: none;
+    border: none;
+  }
+
+  .auth-hero {
+    box-shadow: 4px 4px 0 0 var(--pixel-shadow);
+  }
+
+  h1 {
+    font-size: clamp(13px, 5vw, 18px);
+    line-height: 1.25;
+  }
+
+  p,
+  label,
+  a,
+  button,
+  input {
+    font-size: clamp(9px, 3vw, 11px);
+    line-height: 1.65;
+  }
+
+  form {
+    gap: 10px;
+  }
+
+  input,
+  button {
+    padding: 10px 12px;
+  }
+
+  .auth-card::after {
+    top: -11px;
+    right: 8px;
+    font-size: 8px;
+    padding: 4px 6px;
+  }
+}
+
