@@ -13,6 +13,11 @@ mkdir -p "$RELEASE_DIR"
 mkdir -p "$GATEWAY_RELEASE_DIR"
 
 rsync -a --delete "$DEPLOY_PATH/incoming/site/" "$RELEASE_DIR/"
+if [[ -d "$DEPLOY_PATH/incoming/protected" ]]; then
+	mkdir -p "$DEPLOY_PATH/shared/protected-origin"
+	rsync -a --delete "$DEPLOY_PATH/incoming/protected/" "$DEPLOY_PATH/shared/protected-origin/"
+fi
+
 ln -sfn "$RELEASE_DIR" "$DEPLOY_PATH/current"
 
 if [[ -d "$DEPLOY_PATH/incoming/gateway" ]]; then

@@ -25,7 +25,7 @@ jobs:
       - name: Sync files to VPS incoming folder
         run: |
           ssh -p "${{ secrets.VPS_PORT || 22 }}" "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
-            "mkdir -p '${{ secrets.VPS_DEPLOY_PATH }}/incoming/site' '${{ secrets.VPS_DEPLOY_PATH }}/incoming/gateway'"
+            "mkdir -p '${{ secrets.VPS_DEPLOY_PATH }}/incoming/site' '${{ secrets.VPS_DEPLOY_PATH }}/incoming/gateway' '${{ secrets.VPS_DEPLOY_PATH }}/incoming/protected'"
 
           rsync -az --delete \
             -e "ssh -p ${{ secrets.VPS_PORT || 22 }}" \
@@ -36,6 +36,11 @@ jobs:
             -e "ssh -p ${{ secrets.VPS_PORT || 22 }}" \
             ./gateway/ \
             "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_DEPLOY_PATH }}/incoming/gateway/"
+
+          rsync -az --delete \
+            -e "ssh -p ${{ secrets.VPS_PORT || 22 }}" \
+            ./protected/ \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_DEPLOY_PATH }}/incoming/protected/"
 
           rsync -az \
             -e "ssh -p ${{ secrets.VPS_PORT || 22 }}" \

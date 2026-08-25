@@ -49,3 +49,5 @@ docker compose down
 - Keep `COOKIE_SECURE=true` in production.
 - Use a strong random `TOKEN_SIGNING_KEY`.
 - Prefer `PASSPHRASE_HASH` over plaintext passphrases.
+- Set `PROTECTED_ORIGIN=http://127.0.0.1:8081` in production so the gateway fetches protected files from the internal nginx origin instead of recursively calling the public `/protected/*` route.
+- Deploys now sync the `protected/` directory to `/var/www/musut.beer/shared/protected-origin` for that internal origin.
