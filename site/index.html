@@ -11,14 +11,10 @@
       <section class="card auth-card">
         <img class="auth-hero" src="/assets/erottaja_bg.png" alt="erottaja" />
         <h1>SEIS!</h1>
-        <p>Kenelle ei tarjoilla enään?</p>
-        <form id="unlock-form">
-          <label for="passphrase">Vastaus</label>
-          <input id="passphrase" name="passphrase" />
-          <button type="submit">Avaa</button>
-        </form>
-        <p id="status" role="status" aria-live="polite"></p>
-        <a id="protected-link" href="/protected/library.json" hidden>Open protected resource</a>
+        <div class="countdown" id="countdown" aria-live="polite">
+          <p class="countdown-title">Joudut vähä viel miettimään.</p>
+          <p class="countdown-time" id="countdown-time">Loading...</p>
+        </div>
       </section>
     </main>
     <script src="/app.js" defer></script>
