@@ -198,7 +198,7 @@ function safeEqual(a, b) {
 function buildCookie(token) {
   const maxAge = TOKEN_TTL_SECONDS;
   const secureFlag = COOKIE_SECURE ? "; Secure" : "";
-  return `access_token=${token}; Path=/; HttpOnly${secureFlag}; SameSite=Lax; Max-Age=${maxAge}`;
+  return `access_token=${token}; Path=/; Domain=musut.beer; HttpOnly${secureFlag}; SameSite=Lax; Max-Age=${maxAge}`;
 }
 
 function readCookie(cookieHeader, name) {
