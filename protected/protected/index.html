@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Protected</title>
+  </head>
+  <body>
+    <main class="protected-shell">
+      <section class="protected-card">
+        <p class="eyebrow">Access Granted</p>
+        <h1>Protected</h1>
+        <p>This page and its static assets are served only through the protected route.</p>
+        <ul>
+          <li>Path: /protected/index.html</li>
+          <li>Stylesheet: /protected/assets/index.css</li>
+          <li>Script: /protected/assets/index.js</li>
+        </ul>
+        <p id="timestamp" aria-live="polite"></p>
+      </section>
+    </main>
+    <script src="./assets/index.js" defer></script>
+  </body>
+</html>
