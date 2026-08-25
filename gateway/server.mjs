@@ -34,6 +34,7 @@ const server = createServer(async (req, res) => {
     res.writeHead(404, { "content-type": "text/plain" });
     res.end("Not Found");
   } catch (error) {
+    console.error("Request handling failed:", error);
     res.writeHead(500, { "content-type": "application/json" });
     res.end(JSON.stringify({ error: "Internal error" }));
   }
@@ -98,10 +99,18 @@ async function handleProtected(req, res, url) {
   }
 
   const upstream = new URL(url.pathname + url.search, originBase);
-  const upstreamRes = await fetch(upstream, {
-    method: req.method,
-    headers: filterHeaders(req.headers)
-  });
+  let upstreamRes;
+  try {
+    upstreamRes = await fetch(upstream, {
+      method: req.method,
+      headers: filterHeaders(req.headers)
+    });
+  } catch (error) {
+    console.error("Protected upstream request failed:", upstream.href, error);
+    res.writeHead(502, { "content-type": "application/json" });
+    res.end(JSON.stringify({ error: "Protected upstream unavailable" }));
+    return;
+  }
 
   const bodyBuffer = Buffer.from(await upstreamRes.arrayBuffer());
   res.writeHead(upstreamRes.status, copySafeHeaders(upstreamRes.headers));
