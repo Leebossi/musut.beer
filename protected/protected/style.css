@@ -5,8 +5,8 @@ body {
   font-family: "Trebuchet MS", Verdana, sans-serif;
   color: #000080;
   background-color: #000033;
-  background-image:
-    repeating-linear-gradient(45deg, #1a1a5e 0, #1a1a5e 2px, #000033 2px, #000033 12px);
+  background-image: url("assets/gifs/BACKGROUNDanimatedchangingcolorstars.gif");
+  background-repeat: repeat;
 }
 
 .page-table {
@@ -150,6 +150,11 @@ body {
   font-weight: bold;
   color: #ff0000;
   margin-top: 12px;
+}
+
+.footer-badge {
+  text-align: center;
+  margin-top: 10px;
 }
 
 .blink {
