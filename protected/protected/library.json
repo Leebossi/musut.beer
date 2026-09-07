@@ -7,6 +7,6 @@
     { "title": "Backstage 2", "src": "gallery/sample-2.png" }
   ],
   "downloads": [
-    { "title": "Setlist notes", "file": "downloads/sample-notes.txt", "type": "file" }
+    { "title": "sample file", "file": "downloads/sample-notes.txt", "type": "video" }
   ]
 }
