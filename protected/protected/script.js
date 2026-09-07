@@ -35,13 +35,16 @@ async function loadLibrary() {
 function renderGallery(items) {
   galleryEl.innerHTML = "";
   if (items.length === 0) {
-    galleryEl.textContent = "No gallery items yet.";
+    galleryEl.innerHTML = "<tr><td>No gallery items yet.</td></tr>";
     return;
   }
 
+  const row = document.createElement("tr");
   for (const item of items) {
+    const cell = document.createElement("td");
+    cell.className = "gallery-item";
+
     const link = document.createElement("a");
-    link.className = "gallery-item";
     link.href = item.src;
     link.target = "_blank";
     link.rel = "noopener";
@@ -55,34 +58,46 @@ function renderGallery(items) {
     caption.className = "gallery-caption";
     caption.textContent = item.title || item.src;
 
-    link.append(img, caption);
-    galleryEl.append(link);
+    link.append(img);
+    cell.append(link, document.createElement("br"), caption);
+    row.append(cell);
   }
+  galleryEl.append(row);
 }
 
 function renderDownloads(items) {
   downloadsEl.innerHTML = "";
   if (items.length === 0) {
-    downloadsEl.textContent = "No downloads yet.";
+    downloadsEl.innerHTML = "<tr><td>No downloads yet.</td></tr>";
     return;
   }
 
   for (const item of items) {
-    const li = document.createElement("li");
-    li.className = "download-item";
+    const row = document.createElement("tr");
+    row.className = "download-item";
 
+    const badgeCell = document.createElement("td");
     const badge = document.createElement("span");
     badge.className = "download-badge";
     badge.textContent = TYPE_LABELS[item.type || extensionType(item.file)] || "FILE";
+    badgeCell.append(badge);
 
+    const linkCell = document.createElement("td");
     const link = document.createElement("a");
     link.href = item.file;
     link.download = "";
     link.textContent = item.title || item.file;
+    linkCell.append(link);
 
-    li.append(badge, link);
-    downloadsEl.append(li);
+    row.append(badgeCell, linkCell);
+    downloadsEl.append(row);
   }
 }
 
 loadLibrary();
+
+const hitCountEl = document.getElementById("hit-count");
+if (hitCountEl) {
+  const base = 40000 + Math.floor(Math.random() * 2000);
+  hitCountEl.textContent = String(base).padStart(6, "0");
+}
