@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>musut.beer — dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="dash-view">
+    <main class="shell">
+      <section class="card dash-card">
+        <header class="dash-header">
+          <h1>Protected Dashboard</h1>
+          <p class="dash-sub" id="dash-status">Loading...</p>
+        </header>
+
+        <section class="dash-section">
+          <h2>Gallery</h2>
+          <div class="gallery-grid" id="gallery-grid"></div>
+        </section>
+
+        <section class="dash-section">
+          <h2>Downloads</h2>
+          <ul class="downloads-list" id="downloads-list"></ul>
+        </section>
+
+        <a class="back-link" href="/">&laquo; Back</a>
+      </section>
+    </main>
+    <script src="script.js" defer></script>
+  </body>
+</html>

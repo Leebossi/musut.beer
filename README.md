@@ -36,7 +36,7 @@ Then any one of those words will unlock the site.
 ### Test endpoints
 
 - Public page: `http://localhost:8080/`
-- Protected resource after unlock: `http://localhost:8080/protected/library.json`
+- Protected resource after unlock: `http://localhost:8080/protected/index.html` (dashboard with gallery + downloads)
 
 ### Stop
 
