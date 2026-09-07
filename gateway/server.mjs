@@ -94,8 +94,8 @@ async function handleUnlock(req, res) {
 async function handleProtected(req, res, url) {
   const token = readCookie(req.headers.cookie, "access_token");
   if (!token || !verifyToken(token)) {
-    res.writeHead(401, { "content-type": "text/plain" });
-    res.end("Unauthorized");
+    res.writeHead(302, { location: "/" });
+    res.end();
     return;
   }
 
