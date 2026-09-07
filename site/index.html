@@ -12,9 +12,21 @@
         <img class="auth-hero" src="/assets/erottaja_bg.png" alt="erottaja" />
         <h1>SEIS!</h1>
         <div class="countdown" id="countdown" aria-live="polite">
-          <p class="countdown-title">Joudut vähä viel miettimään.</p>
-          <p class="countdown-time" id="countdown-time">Loading...</p>
+          <p class="countdown-time">Syötä salasana</p>
         </div>
+        <form id="unlock-form">
+          <label for="passphrase">Kenelle ei tarjoilla enään?</label>
+          <input
+            type="password"
+            id="passphrase"
+            name="passphrase"
+            autocomplete="off"
+            required
+          />
+          <button type="submit">Unlock</button>
+        </form>
+        <p id="status" aria-live="polite"></p>
+        <a id="protected-link" href="/protected/library.json" hidden>Open protected content</a>
       </section>
     </main>
     <script src="/app.js" defer></script>

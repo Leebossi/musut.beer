@@ -52,8 +52,8 @@ if (form && statusEl && protectedLink) {
         return;
       }
 
-      statusEl.textContent = "Unlocked. You can open protected content now.";
-      protectedLink.hidden = false;
+      statusEl.textContent = "Unlocked. Redirecting...";
+      window.location.href = protectedLink.href;
     } catch (error) {
       statusEl.textContent = "Unlock request failed. Try again.";
     }
