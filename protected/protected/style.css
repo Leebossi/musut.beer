@@ -122,6 +122,20 @@ body {
   padding: 2px 6px;
 }
 
+.download-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  line-height: 16px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+img.download-icon {
+  object-fit: contain;
+}
+
 .download-item a {
   color: #0000ee;
   font-weight: bold;

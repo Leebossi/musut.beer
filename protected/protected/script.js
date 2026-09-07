@@ -9,6 +9,32 @@ const TYPE_LABELS = {
   image: "IMG"
 };
 
+const TYPE_ICONS = {
+  image: "🖼️"
+};
+
+const TYPE_IMAGE_ICONS = {
+  video: "assets/img/video.png",
+  mp4: "assets/img/video.png",
+  file: "assets/img/file.png"
+};
+
+function createTypeIcon(resolvedType) {
+  const imageSrc = TYPE_IMAGE_ICONS[resolvedType];
+  if (imageSrc) {
+    const img = document.createElement("img");
+    img.className = "download-icon";
+    img.src = imageSrc;
+    img.alt = "";
+    return img;
+  }
+
+  const icon = document.createElement("span");
+  icon.className = "download-icon";
+  icon.textContent = TYPE_ICONS[resolvedType] || TYPE_ICONS.file;
+  return icon;
+}
+
 function extensionType(fileName) {
   const ext = String(fileName).split(".").pop().toLowerCase();
   if (ext === "mp4") return "video";
@@ -77,10 +103,15 @@ function renderDownloads(items) {
     row.className = "download-item";
 
     const badgeCell = document.createElement("td");
+    const resolvedType = item.type || extensionType(item.file);
+
+    const icon = createTypeIcon(resolvedType);
+
     const badge = document.createElement("span");
     badge.className = "download-badge";
-    badge.textContent = TYPE_LABELS[item.type || extensionType(item.file)] || "FILE";
-    badgeCell.append(badge);
+    badge.textContent = TYPE_LABELS[resolvedType] || "FILE";
+
+    badgeCell.append(icon, badge);
 
     const linkCell = document.createElement("td");
     const link = document.createElement("a");
