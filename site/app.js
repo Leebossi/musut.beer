@@ -3,6 +3,16 @@ const statusEl = document.getElementById("status");
 const protectedLink = document.getElementById("protected-link");
 const countdownTimeEl = document.getElementById("countdown-time");
 
+if (protectedLink) {
+  fetch(protectedLink.href, { credentials: "same-origin" })
+    .then((response) => {
+      if (response.ok && !response.redirected) {
+        window.location.href = protectedLink.href;
+      }
+    })
+    .catch(() => {});
+}
+
 const targetDate = new Date("2026-09-18T00:00:00");
 
 function updateCountdown() {
