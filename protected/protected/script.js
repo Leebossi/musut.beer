@@ -18,7 +18,7 @@ function extensionType(fileName) {
 
 async function loadLibrary() {
   try {
-    const response = await fetch("library.json");
+    const response = await fetch(`library.json?t=${Date.now()}`, { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`Request failed: ${response.status}`);
     }
