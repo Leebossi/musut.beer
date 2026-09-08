@@ -15,7 +15,7 @@ if (protectedLink) {
     .catch(() => {});
 }
 
-const targetDate = new Date("2026-09-18T16:20:00");
+const targetDate = new Date("2026-09-18T21:00:00");
 
 function updateCountdown() {
   if (!countdownTimeEl) {
