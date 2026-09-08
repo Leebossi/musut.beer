@@ -167,6 +167,13 @@ img {
   border-style: inset;
 }
 
+.guestbook-feedback {
+  margin: 0;
+  font-size: 13px;
+  color: #ff0000;
+  font-weight: bold;
+}
+
 .downloads-list {
   display: flex;
   flex-direction: column;

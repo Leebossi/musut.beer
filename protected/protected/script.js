@@ -4,9 +4,9 @@ const guestbookListEl = document.getElementById("guestbook-list");
 const guestbookFormEl = document.getElementById("guestbook-form");
 const guestbookNameEl = document.getElementById("guestbook-name");
 const guestbookMessageEl = document.getElementById("guestbook-message");
+const guestbookFeedbackEl = document.getElementById("guestbook-feedback");
 
-const GUESTBOOK_STORAGE_KEY = "musut-guestbook-entries";
-let libraryGuestbookEntries = [];
+const GUESTBOOK_API = "/api/guestbook";
 
 const TYPE_LABELS = {
   file: "FILE",
@@ -57,33 +57,28 @@ async function loadLibrary() {
 
     const library = await response.json();
     statusEl.textContent = library.title || "Library loaded.";
-    libraryGuestbookEntries = library.guestbook || [];
-    renderGuestbook();
     renderDownloads(library.downloads || []);
   } catch (error) {
     statusEl.textContent = "Failed to load library.";
   }
+
+  loadGuestbook();
 }
 
-function loadLocalGuestbookEntries() {
+async function loadGuestbook() {
   try {
-    const parsed = JSON.parse(localStorage.getItem(GUESTBOOK_STORAGE_KEY) || "[]");
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
+    const response = await fetch(`${GUESTBOOK_API}?t=${Date.now()}`, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Request failed: ${response.status}`);
+    }
+    const data = await response.json();
+    renderGuestbook(data.entries || []);
+  } catch (error) {
+    guestbookListEl.innerHTML = "<p>Failed to load guestbook.</p>";
   }
 }
 
-function saveLocalGuestbookEntries(entries) {
-  try {
-    localStorage.setItem(GUESTBOOK_STORAGE_KEY, JSON.stringify(entries));
-  } catch {
-    // ignore storage failures, e.g. private browsing
-  }
-}
-
-function renderGuestbook() {
-  const entries = [...libraryGuestbookEntries, ...loadLocalGuestbookEntries()];
+function renderGuestbook(entries) {
   guestbookListEl.innerHTML = "";
   if (entries.length === 0) {
     guestbookListEl.innerHTML = "<p>No entries yet. Be the first to sign!</p>";
@@ -117,18 +112,30 @@ function renderGuestbook() {
 }
 
 if (guestbookFormEl) {
-  guestbookFormEl.addEventListener("submit", (event) => {
+  guestbookFormEl.addEventListener("submit", async (event) => {
     event.preventDefault();
     const name = guestbookNameEl.value.trim();
     const message = guestbookMessageEl.value.trim();
     if (!name || !message) return;
 
-    const entries = loadLocalGuestbookEntries();
-    entries.push({ name, message, date: new Date().toISOString().slice(0, 10) });
-    saveLocalGuestbookEntries(entries);
+    if (guestbookFeedbackEl) guestbookFeedbackEl.textContent = "";
 
-    guestbookFormEl.reset();
-    renderGuestbook();
+    try {
+      const response = await fetch(GUESTBOOK_API, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ name, message })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed: ${response.status}`);
+      }
+
+      guestbookFormEl.reset();
+      await loadGuestbook();
+    } catch (error) {
+      if (guestbookFeedbackEl) guestbookFeedbackEl.textContent = "Failed to sign the guestbook. Please try again.";
+    }
   });
 }
 
