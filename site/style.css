@@ -51,6 +51,10 @@ input, select, textarea {
   overflow: hidden;
 }
 
+.auth-card[hidden] {
+  display: none;
+}
+
 .auth-hero {
   width: 100%;
   display: block;
@@ -180,8 +184,7 @@ button:active {
   a,
   button,
   input {
-    font-size: clamp(9px, 3vw, 11px);
-    line-height: 1.65;
+    font-size: inherit;
   }
 
   form {

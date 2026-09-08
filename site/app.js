@@ -2,6 +2,8 @@ const form = document.getElementById("unlock-form");
 const statusEl = document.getElementById("status");
 const protectedLink = document.getElementById("protected-link");
 const countdownTimeEl = document.getElementById("countdown-time");
+const unlockCard = document.getElementById("unlock-card");
+const countdownCard = document.getElementById("countdown-card");
 
 if (protectedLink) {
   fetch(protectedLink.href, { credentials: "same-origin" })
@@ -13,7 +15,7 @@ if (protectedLink) {
     .catch(() => {});
 }
 
-const targetDate = new Date("2026-09-18T00:00:00");
+const targetDate = new Date("2026-09-18T16:20:00");
 
 function updateCountdown() {
   if (!countdownTimeEl) {
@@ -25,6 +27,12 @@ function updateCountdown() {
 
   if (diffMs <= 0) {
     countdownTimeEl.textContent = "It is 18.9.2026.";
+    if (unlockCard) {
+      unlockCard.hidden = false;
+    }
+    if (countdownCard) {
+      countdownCard.hidden = true;
+    }
     return;
   }
 
