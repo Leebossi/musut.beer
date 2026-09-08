@@ -33,7 +33,8 @@ async function initGuestbookDb() {
   return JSONFilePreset(GUESTBOOK_DB_PATH, {
     entries: [
       { name: "lerz", message: "musut ens vuonna 10v", date: "2026-09-08" },
-    ]
+    ],
+    visitCount: 0
   });
 }
 
@@ -51,6 +52,10 @@ const server = createServer(async (req, res) => {
 
     if (url.pathname === "/api/guestbook" && req.method === "POST") {
       return await handleGuestbookCreate(req, res);
+    }
+
+    if (url.pathname === "/api/visits" && req.method === "POST") {
+      return await handleVisitIncrement(req, res);
     }
 
     if (url.pathname.startsWith("/protected/")) {
@@ -209,6 +214,21 @@ async function handleGuestbookCreate(req, res) {
 
   res.writeHead(201, { "content-type": "application/json" });
   res.end(JSON.stringify({ entry }));
+}
+
+async function handleVisitIncrement(req, res) {
+  if (!hasValidSession(req)) {
+    res.writeHead(401, { "content-type": "application/json" });
+    res.end(JSON.stringify({ error: "Unauthorized" }));
+    return;
+  }
+
+  const db = await guestbookDbReady;
+  db.data.visitCount = (db.data.visitCount || 0) + 1;
+  await db.write();
+
+  res.writeHead(200, { "content-type": "application/json" });
+  res.end(JSON.stringify({ count: db.data.visitCount }));
 }
 
 export function parsePassphraseWordList(wordListValue) {

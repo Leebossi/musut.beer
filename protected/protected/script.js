@@ -226,6 +226,10 @@ loadLibrary();
 
 const hitCountEl = document.getElementById("hit-count");
 if (hitCountEl) {
-  const base = 40000 + Math.floor(Math.random() * 2000);
-  hitCountEl.textContent = String(base).padStart(6, "0");
+  fetch("/api/visits", { method: "POST" })
+    .then((response) => (response.ok ? response.json() : Promise.reject()))
+    .then((data) => {
+      hitCountEl.textContent = String(data.count).padStart(6, "0");
+    })
+    .catch(() => {});
 }
