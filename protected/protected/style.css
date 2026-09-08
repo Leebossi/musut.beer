@@ -25,7 +25,7 @@ img {
   height: auto;
 }
 
-.page-table {
+.page-frame {
   width: 960px;
   max-width: 100%;
   margin: 12px auto;
@@ -42,7 +42,7 @@ img {
   border-bottom: 2px solid #000000;
 }
 
-.layout-table {
+.layout-frame {
   width: 100%;
   background: #ffffff;
 }
@@ -80,9 +80,10 @@ img {
   margin: 18px 0;
 }
 
-.section-table {
+.section-frame {
   border: 2px groove #808080;
   background: #f0f0f0;
+  margin: 0;
 }
 
 .section-title {
@@ -92,19 +93,26 @@ img {
   font-size: 20px;
   text-align: center;
   padding: 8px;
+  margin: 0;
   letter-spacing: 1.2px;
 }
 
+.section-body {
+  padding: 6px;
+}
+
 .gallery-grid {
-  border-collapse: collapse;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .gallery-item {
   text-align: center;
-  vertical-align: top;
   border: 2px inset #808080;
   background: #ffffff;
   padding: 10px;
+  width: 194px;
 }
 
 .gallery-item img {
@@ -123,13 +131,31 @@ img {
 }
 
 .downloads-list {
-  border-collapse: collapse;
+  display: flex;
+  flex-direction: column;
 }
 
-.download-item td {
+.download-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   border-bottom: 1px dashed #808080;
   padding: 10px 6px;
   font-size: 15px;
+}
+
+.download-badge-cell {
+  flex: 0 0 auto;
+}
+
+.download-link-cell {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.download-link-cell a {
+  
 }
 
 .download-badge {
@@ -262,8 +288,8 @@ img.download-icon {
 }
 
 @media (max-width: 640px) {
-  .page-table,
-  .layout-table {
+  .page-frame,
+  .layout-frame {
     width: 100%;
   }
 
@@ -271,15 +297,8 @@ img.download-icon {
     font-size: 20px;
   }
 
-  .gallery-grid,
-  .gallery-grid tr {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
   .gallery-item {
-    display: block;
-    flex: 0 0 auto;
+    width: 114px;
   }
 
   .gallery-item img {

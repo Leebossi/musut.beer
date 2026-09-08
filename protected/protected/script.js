@@ -61,13 +61,12 @@ async function loadLibrary() {
 function renderGallery(items) {
   galleryEl.innerHTML = "";
   if (items.length === 0) {
-    galleryEl.innerHTML = "<tr><td>No gallery items yet.</td></tr>";
+    galleryEl.innerHTML = "<p>No gallery items yet.</p>";
     return;
   }
 
-  const row = document.createElement("tr");
   for (const item of items) {
-    const cell = document.createElement("td");
+    const cell = document.createElement("div");
     cell.className = "gallery-item";
 
     const link = document.createElement("a");
@@ -86,23 +85,23 @@ function renderGallery(items) {
 
     link.append(img);
     cell.append(link, document.createElement("br"), caption);
-    row.append(cell);
+    galleryEl.append(cell);
   }
-  galleryEl.append(row);
 }
 
 function renderDownloads(items) {
   downloadsEl.innerHTML = "";
   if (items.length === 0) {
-    downloadsEl.innerHTML = "<tr><td>No downloads yet.</td></tr>";
+    downloadsEl.innerHTML = "<p>No downloads yet.</p>";
     return;
   }
 
   for (const item of items) {
-    const row = document.createElement("tr");
+    const row = document.createElement("div");
     row.className = "download-item";
 
-    const badgeCell = document.createElement("td");
+    const badgeCell = document.createElement("div");
+    badgeCell.className = "download-badge-cell";
     const resolvedType = item.type || extensionType(item.file);
 
     const icon = createTypeIcon(resolvedType);
@@ -113,17 +112,18 @@ function renderDownloads(items) {
 
     badgeCell.append(icon, badge);
 
-    const linkCell = document.createElement("td");
+    const linkCell = document.createElement("div");
+    linkCell.className = "download-link-cell";
 
     if (resolvedType === "video" || resolvedType === "mp4") {
       const watchLink = document.createElement("a");
       watchLink.href = item.file;
-      watchLink.textContent = "▶ Watch";
+      watchLink.textContent = "▶ Watch " + (item.title || item.file);
       watchLink.addEventListener("click", (event) => {
         event.preventDefault();
         openVideoModal(item.file);
       });
-      linkCell.append(watchLink, document.createTextNode(" | "));
+      linkCell.append(watchLink, document.createTextNode(""));
     }
 
     const link = document.createElement("a");
@@ -133,7 +133,7 @@ function renderDownloads(items) {
     downloadIcon.className = "download-link-icon";
     downloadIcon.src = "assets/img/download.png";
     downloadIcon.alt = "Download";
-    link.append(downloadIcon, document.createTextNode(item.title || item.file));
+    link.append(downloadIcon);
     linkCell.append(link);
 
     row.append(badgeCell, linkCell);
