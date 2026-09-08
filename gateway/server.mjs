@@ -26,7 +26,30 @@ const {
 
 const originBase = PROTECTED_ORIGIN ? new URL(PROTECTED_ORIGIN) : null;
 
-const guestbookDbReady = initGuestbookDb();
+let guestbookDb = null;
+let guestbookDbInitPromise = null;
+
+async function getGuestbookDb() {
+  if (guestbookDb) {
+    return guestbookDb;
+  }
+
+  if (!guestbookDbInitPromise) {
+    guestbookDbInitPromise = initGuestbookDb()
+      .then((db) => {
+        guestbookDb = db;
+        return db;
+      })
+      .catch((error) => {
+        // allow the next request to retry instead of failing forever on a transient init error
+        guestbookDbInitPromise = null;
+        console.error(`Guestbook DB init failed (path: ${GUESTBOOK_DB_PATH}):`, error);
+        throw error;
+      });
+  }
+
+  return guestbookDbInitPromise;
+}
 
 async function initGuestbookDb() {
   mkdirSync(dirname(GUESTBOOK_DB_PATH), { recursive: true });
@@ -175,7 +198,7 @@ async function handleGuestbookList(req, res) {
     return;
   }
 
-  const db = await guestbookDbReady;
+  const db = await getGuestbookDb();
   const entries = [...db.data.entries].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
@@ -208,7 +231,7 @@ async function handleGuestbookCreate(req, res) {
 
   const entry = { ...sanitized, createdAt: new Date().toISOString() };
 
-  const db = await guestbookDbReady;
+  const db = await getGuestbookDb();
   db.data.entries.push(entry);
   if (db.data.entries.length > GUESTBOOK_MAX_ENTRIES) {
     db.data.entries = db.data.entries
@@ -229,7 +252,7 @@ async function handleVisitIncrement(req, res) {
     return;
   }
 
-  const db = await guestbookDbReady;
+  const db = await getGuestbookDb();
   db.data.visitCount = (db.data.visitCount || 0) + 1;
   await db.write();
 
