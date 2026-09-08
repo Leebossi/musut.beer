@@ -1,13 +1,19 @@
 import { createHmac, createHash, timingSafeEqual } from "node:crypto";
-import { realpathSync } from "node:fs";
+import { mkdirSync, realpathSync } from "node:fs";
 import { createServer } from "node:http";
+import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { JSONFilePreset } from "lowdb/node";
 
 const HOST = process.env.HOST || "127.0.0.1";
 const PORT = Number(process.env.PORT || 8787);
 const TOKEN_TTL_SECONDS = Number(process.env.TOKEN_TTL_SECONDS || 300);
 const COOKIE_SECURE = process.env.COOKIE_SECURE !== "false";
 const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN || "";
+const GUESTBOOK_DB_PATH = process.env.GUESTBOOK_DB_PATH || "./data/guestbook.json";
+const GUESTBOOK_NAME_MAX_LENGTH = 40;
+const GUESTBOOK_MESSAGE_MAX_LENGTH = 280;
+const GUESTBOOK_MAX_ENTRIES = 500;
 
 const {
   TOKEN_SIGNING_KEY,
@@ -20,12 +26,31 @@ const {
 
 const originBase = PROTECTED_ORIGIN ? new URL(PROTECTED_ORIGIN) : null;
 
+const guestbookDbReady = initGuestbookDb();
+
+async function initGuestbookDb() {
+  mkdirSync(dirname(GUESTBOOK_DB_PATH), { recursive: true });
+  return JSONFilePreset(GUESTBOOK_DB_PATH, {
+    entries: [
+      { name: "lerz", message: "musut ens vuonna 10v", date: "2026-09-08" },
+    ]
+  });
+}
+
 const server = createServer(async (req, res) => {
   try {
     const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
 
     if (url.pathname === "/api/unlock" && req.method === "POST") {
       return await handleUnlock(req, res);
+    }
+
+    if (url.pathname === "/api/guestbook" && req.method === "GET") {
+      return await handleGuestbookList(req, res);
+    }
+
+    if (url.pathname === "/api/guestbook" && req.method === "POST") {
+      return await handleGuestbookCreate(req, res);
     }
 
     if (url.pathname.startsWith("/protected/")) {
@@ -116,6 +141,74 @@ async function handleProtected(req, res, url) {
   const bodyBuffer = Buffer.from(await upstreamRes.arrayBuffer());
   res.writeHead(upstreamRes.status, copySafeHeaders(upstreamRes.headers));
   res.end(bodyBuffer);
+}
+
+function hasValidSession(req) {
+  const token = readCookie(req.headers.cookie, "access_token");
+  return Boolean(token && verifyToken(token));
+}
+
+export function sanitizeGuestbookEntry(payload) {
+  const name = String(payload?.name ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim();
+  const message = String(payload?.message ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim();
+
+  if (!name || !message) {
+    return null;
+  }
+
+  if (name.length > GUESTBOOK_NAME_MAX_LENGTH || message.length > GUESTBOOK_MESSAGE_MAX_LENGTH) {
+    return null;
+  }
+
+  return { name, message };
+}
+
+async function handleGuestbookList(req, res) {
+  if (!hasValidSession(req)) {
+    res.writeHead(401, { "content-type": "application/json" });
+    res.end(JSON.stringify({ error: "Unauthorized" }));
+    return;
+  }
+
+  const db = await guestbookDbReady;
+  res.writeHead(200, { "content-type": "application/json" });
+  res.end(JSON.stringify({ entries: db.data.entries }));
+}
+
+async function handleGuestbookCreate(req, res) {
+  if (!hasValidSession(req)) {
+    res.writeHead(401, { "content-type": "application/json" });
+    res.end(JSON.stringify({ error: "Unauthorized" }));
+    return;
+  }
+
+  let payload;
+  try {
+    payload = JSON.parse((await readBody(req)) || "{}");
+  } catch {
+    res.writeHead(400, { "content-type": "application/json" });
+    res.end(JSON.stringify({ error: "Invalid JSON" }));
+    return;
+  }
+
+  const sanitized = sanitizeGuestbookEntry(payload);
+  if (!sanitized) {
+    res.writeHead(400, { "content-type": "application/json" });
+    res.end(JSON.stringify({ error: "Invalid entry" }));
+    return;
+  }
+
+  const entry = { ...sanitized, date: new Date().toISOString().slice(0, 10) };
+
+  const db = await guestbookDbReady;
+  db.data.entries.push(entry);
+  if (db.data.entries.length > GUESTBOOK_MAX_ENTRIES) {
+    db.data.entries = db.data.entries.slice(-GUESTBOOK_MAX_ENTRIES);
+  }
+  await db.write();
+
+  res.writeHead(201, { "content-type": "application/json" });
+  res.end(JSON.stringify({ entry }));
 }
 
 export function parsePassphraseWordList(wordListValue) {
