@@ -8,7 +8,8 @@
   </head>
   <body class="auth-view">
     <main class="shell">
-      <section class="card auth-card">
+
+      <section class="card auth-card" id="countdown-card">
         <img class="auth-hero" src="/assets/erottaja_bg.png" alt="erottaja" />
         <h1>SEIS!</h1>
         <div class="countdown" id="countdown" aria-live="polite">
@@ -16,7 +17,31 @@
           <p class="countdown-time" id="countdown-time">Loading...</p>
         </div>
       </section>
+
+      <section class="card auth-card" id="unlock-card" hidden>
+        <img class="auth-hero" src="/assets/erottaja_bg.png" alt="erottaja" />
+        <h1>SEIS!</h1>
+        <div class="countdown" id="countdown" aria-live="polite">
+          <p class="countdown-time">Syötä salasana</p>
+        </div>
+        <form id="unlock-form">
+          <label for="passphrase">Kenelle ei tarjoilla enään?</label>
+          <input
+            type="text"
+            id="passphrase"
+            name="passphrase"
+            autocomplete="off"
+            required
+          />
+          <button type="submit">Unlock</button>
+        </form>
+        <p id="status" aria-live="polite"></p>
+        <a id="protected-link" href="/protected/index.html" hidden></a>
+      </section>
+
+
     </main>
     <script src="/app.js" defer></script>
   </body>
 </html>
+

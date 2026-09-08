@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>~*~ musut.beer Members Area ~*~</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="dash-view">
+    <div class="page-frame">
+      <div class="banner-cell">
+        <marquee behavior="scroll" direction="left" scrollamount="4">
+          *** WELCOME TO THE MEMBERS AREA *** BEST VIEWED IN 800x600 *** DO NOT
+          LEAK PASSWORD ***
+        </marquee>
+      </div>
+      <div class="layout-frame">
+        <div class="main-cell">
+          <img
+            class="banner-gif"
+            src="assets/gifs/casino.gif"
+            alt="Casino GIF"
+          />
+          <p class="dash-sub" id="dash-status">Loading...</p>
+          <hr class="rainbow-rule" />
+
+          <section class="section-frame">
+            <h2 class="section-title">☆ File Downloads ☆</h2>
+            <div class="section-body">
+              <div class="downloads-list" id="downloads-list"></div>
+            </div>
+          </section>
+
+          <hr class="rainbow-rule" />
+
+          <section class="section-frame">
+            <h2 class="section-title">☆ Guestbook ☆</h2>
+            <div class="section-body">
+              <div class="guestbook-list" id="guestbook-list"></div>
+              <form class="guestbook-form" id="guestbook-form">
+                <input
+                  type="text"
+                  class="guestbook-input"
+                  id="guestbook-name"
+                  placeholder="Your name"
+                  maxlength="40"
+                  required
+                />
+                <textarea
+                  class="guestbook-textarea"
+                  id="guestbook-message"
+                  placeholder="Leave a message..."
+                  maxlength="280"
+                  rows="3"
+                  required
+                ></textarea>
+                <button type="submit" class="guestbook-submit">
+                  ✎ Sign the Guestbook
+                </button>
+                <p class="guestbook-feedback" id="guestbook-feedback"></p>
+              </form>
+            </div>
+          </section>
+
+          <hr class="rainbow-rule" />
+
+          <p class="webring">
+            <span class="hit-counter"
+              >Visitors: <span id="hit-count">000042</span></span
+            >
+          </p>
+
+          <p class="footer-badge">
+            <img
+              src="assets/gifs/macmade-blkwtbrdrspin.gif"
+              alt="Made on a Mac"
+            />
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="video-modal" class="video-modal" hidden>
+      <div class="video-modal-inner">
+        <button
+          type="button"
+          id="video-modal-close"
+          class="video-modal-close"
+          aria-label="Close video"
+        >
+          ✕
+        </button>
+        <video
+          id="video-modal-player"
+          class="video-modal-player"
+          controls
+        ></video>
+      </div>
+    </div>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>

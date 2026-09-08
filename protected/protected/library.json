@@ -1,5 +1,8 @@
 {
   "title": "Protected Library",
   "status": "ok",
-  "source": "local docker protected-origin"
+  "source": "local docker protected-origin",
+  "downloads": [
+    { "title": "sample file", "file": "downloads/sample-notes.txt", "type": "video" }
+  ]
 }
