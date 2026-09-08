@@ -101,33 +101,70 @@ img {
   padding: 6px;
 }
 
-.gallery-grid {
+.guestbook-list {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.guestbook-entry {
+  border: 2px inset #808080;
+  background: #ffffff;
+  padding: 8px 10px;
+}
+
+.guestbook-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
   gap: 8px;
 }
 
-.gallery-item {
-  text-align: center;
-  border: 2px inset #808080;
-  background: #ffffff;
-  padding: 10px;
-  width: 194px;
-}
-
-.gallery-item img {
-  width: 170px;
-  height: 170px;
-  max-width: 100%;
-  object-fit: cover;
-  border: 3px double #000080;
-}
-
-.gallery-caption {
-  display: block;
-  font-size: 13px;
+.guestbook-name {
+  font-weight: bold;
   color: #800080;
-  margin-top: 6px;
+}
+
+.guestbook-date {
+  font-size: 12px;
+  color: #808080;
+}
+
+.guestbook-message {
+  margin: 4px 0 0;
+  word-break: break-word;
+}
+
+.guestbook-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 2px groove #808080;
+  padding-top: 10px;
+}
+
+.guestbook-input,
+.guestbook-textarea {
+  font-family: inherit;
+  font-size: 14px;
+  border: 2px inset #808080;
+  padding: 6px 8px;
+  resize: vertical;
+}
+
+.guestbook-submit {
+  align-self: flex-start;
+  border: 2px outset #ff0000;
+  background: #ff0000;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+.guestbook-submit:active {
+  border-style: inset;
 }
 
 .downloads-list {
@@ -294,12 +331,8 @@ img.download-icon {
     font-size: 20px;
   }
 
-  .gallery-item {
-    width: 114px;
-  }
-
-  .gallery-item img {
-    width: 90px;
-    height: 90px;
+  .guestbook-entry-header {
+    flex-direction: column;
+    gap: 2px;
   }
 }

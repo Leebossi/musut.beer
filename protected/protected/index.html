@@ -10,8 +10,8 @@
     <div class="page-frame">
       <div class="banner-cell">
         <marquee behavior="scroll" direction="left" scrollamount="4">
-          *** WELCOME TO THE MEMBERS AREA *** BEST VIEWED IN 800x600 *** DO
-          NOT LEAK PASSWORD ***
+          *** WELCOME TO THE MEMBERS AREA *** BEST VIEWED IN 800x600 *** DO NOT
+          LEAK PASSWORD ***
         </marquee>
       </div>
       <div class="layout-frame">
@@ -25,18 +25,39 @@
           <hr class="rainbow-rule" />
 
           <section class="section-frame">
-            <h2 class="section-title">☆ Photo Gallery ☆</h2>
+            <h2 class="section-title">☆ File Downloads ☆</h2>
             <div class="section-body">
-              <div class="gallery-grid" id="gallery-grid"></div>
+              <div class="downloads-list" id="downloads-list"></div>
             </div>
           </section>
 
           <hr class="rainbow-rule" />
 
           <section class="section-frame">
-            <h2 class="section-title">☆ File Downloads ☆</h2>
+            <h2 class="section-title">☆ Guestbook ☆</h2>
             <div class="section-body">
-              <div class="downloads-list" id="downloads-list"></div>
+              <div class="guestbook-list" id="guestbook-list"></div>
+              <form class="guestbook-form" id="guestbook-form">
+                <input
+                  type="text"
+                  class="guestbook-input"
+                  id="guestbook-name"
+                  placeholder="Your name"
+                  maxlength="40"
+                  required
+                />
+                <textarea
+                  class="guestbook-textarea"
+                  id="guestbook-message"
+                  placeholder="Leave a message..."
+                  maxlength="280"
+                  rows="3"
+                  required
+                ></textarea>
+                <button type="submit" class="guestbook-submit">
+                  ✎ Sign the Guestbook
+                </button>
+              </form>
             </div>
           </section>
 

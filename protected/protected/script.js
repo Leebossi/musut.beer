@@ -1,6 +1,12 @@
 const statusEl = document.getElementById("dash-status");
-const galleryEl = document.getElementById("gallery-grid");
 const downloadsEl = document.getElementById("downloads-list");
+const guestbookListEl = document.getElementById("guestbook-list");
+const guestbookFormEl = document.getElementById("guestbook-form");
+const guestbookNameEl = document.getElementById("guestbook-name");
+const guestbookMessageEl = document.getElementById("guestbook-message");
+
+const GUESTBOOK_STORAGE_KEY = "musut-guestbook-entries";
+let libraryGuestbookEntries = [];
 
 const TYPE_LABELS = {
   file: "FILE",
@@ -51,42 +57,79 @@ async function loadLibrary() {
 
     const library = await response.json();
     statusEl.textContent = library.title || "Library loaded.";
-    renderGallery(library.gallery || []);
+    libraryGuestbookEntries = library.guestbook || [];
+    renderGuestbook();
     renderDownloads(library.downloads || []);
   } catch (error) {
     statusEl.textContent = "Failed to load library.";
   }
 }
 
-function renderGallery(items) {
-  galleryEl.innerHTML = "";
-  if (items.length === 0) {
-    galleryEl.innerHTML = "<p>No gallery items yet.</p>";
+function loadLocalGuestbookEntries() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(GUESTBOOK_STORAGE_KEY) || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveLocalGuestbookEntries(entries) {
+  try {
+    localStorage.setItem(GUESTBOOK_STORAGE_KEY, JSON.stringify(entries));
+  } catch {
+    // ignore storage failures, e.g. private browsing
+  }
+}
+
+function renderGuestbook() {
+  const entries = [...libraryGuestbookEntries, ...loadLocalGuestbookEntries()];
+  guestbookListEl.innerHTML = "";
+  if (entries.length === 0) {
+    guestbookListEl.innerHTML = "<p>No entries yet. Be the first to sign!</p>";
     return;
   }
 
-  for (const item of items) {
-    const cell = document.createElement("div");
-    cell.className = "gallery-item";
+  for (const entry of entries) {
+    const entryEl = document.createElement("div");
+    entryEl.className = "guestbook-entry";
 
-    const link = document.createElement("a");
-    link.href = item.src;
-    link.target = "_blank";
-    link.rel = "noopener";
+    const headerEl = document.createElement("div");
+    headerEl.className = "guestbook-entry-header";
 
-    const img = document.createElement("img");
-    img.src = item.src;
-    img.alt = item.title || "";
-    img.loading = "lazy";
+    const nameEl = document.createElement("span");
+    nameEl.className = "guestbook-name";
+    nameEl.textContent = entry.name || "anon";
 
-    const caption = document.createElement("span");
-    caption.className = "gallery-caption";
-    caption.textContent = item.title || item.src;
+    const dateEl = document.createElement("span");
+    dateEl.className = "guestbook-date";
+    dateEl.textContent = entry.date || "";
 
-    link.append(img);
-    cell.append(link, document.createElement("br"), caption);
-    galleryEl.append(cell);
+    headerEl.append(nameEl, dateEl);
+
+    const messageEl = document.createElement("p");
+    messageEl.className = "guestbook-message";
+    messageEl.textContent = entry.message || "";
+
+    entryEl.append(headerEl, messageEl);
+    guestbookListEl.append(entryEl);
   }
+}
+
+if (guestbookFormEl) {
+  guestbookFormEl.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const name = guestbookNameEl.value.trim();
+    const message = guestbookMessageEl.value.trim();
+    if (!name || !message) return;
+
+    const entries = loadLocalGuestbookEntries();
+    entries.push({ name, message, date: new Date().toISOString().slice(0, 10) });
+    saveLocalGuestbookEntries(entries);
+
+    guestbookFormEl.reset();
+    renderGuestbook();
+  });
 }
 
 function renderDownloads(items) {
