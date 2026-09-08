@@ -2,3 +2,4 @@
 .env
 gateway/data/
 node_modules/
+downloads/
