@@ -7,6 +7,7 @@ const HOST = process.env.HOST || "127.0.0.1";
 const PORT = Number(process.env.PORT || 8787);
 const TOKEN_TTL_SECONDS = Number(process.env.TOKEN_TTL_SECONDS || 300);
 const COOKIE_SECURE = process.env.COOKIE_SECURE !== "false";
+const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN || "";
 
 const {
   TOKEN_SIGNING_KEY,
@@ -93,8 +94,8 @@ async function handleUnlock(req, res) {
 async function handleProtected(req, res, url) {
   const token = readCookie(req.headers.cookie, "access_token");
   if (!token || !verifyToken(token)) {
-    res.writeHead(401, { "content-type": "text/plain" });
-    res.end("Unauthorized");
+    res.writeHead(302, { location: "/" });
+    res.end();
     return;
   }
 
@@ -207,7 +208,8 @@ function safeEqual(a, b) {
 function buildCookie(token) {
   const maxAge = TOKEN_TTL_SECONDS;
   const secureFlag = COOKIE_SECURE ? "; Secure" : "";
-  return `access_token=${token}; Path=/; Domain=musut.beer; HttpOnly${secureFlag}; SameSite=Lax; Max-Age=${maxAge}`;
+  const domainFlag = COOKIE_DOMAIN ? `; Domain=${COOKIE_DOMAIN}` : "";
+  return `access_token=${token}; Path=/${domainFlag}; HttpOnly${secureFlag}; SameSite=Lax; Max-Age=${maxAge}`;
 }
 
 function readCookie(cookieHeader, name) {

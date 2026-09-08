@@ -1,5 +1,12 @@
 {
   "title": "Protected Library",
   "status": "ok",
-  "source": "local docker protected-origin"
+  "source": "local docker protected-origin",
+  "gallery": [
+    { "title": "Backstage 1", "src": "gallery/sample-1.png" },
+    { "title": "Backstage 2", "src": "gallery/sample-2.png" }
+  ],
+  "downloads": [
+    { "title": "sample file", "file": "downloads/sample-notes.txt", "type": "video" }
+  ]
 }

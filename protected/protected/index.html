@@ -3,22 +3,79 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Protected</title>
+    <title>~*~ musut.beer Members Area ~*~</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
-    <main class="protected-shell">
-      <section class="protected-card">
-        <p class="eyebrow">Access Granted</p>
-        <h1>Protected</h1>
-        <p>This page and its static assets are served only through the protected route.</p>
-        <ul>
-          <li>Path: /protected/index.html</li>
-          <li>Stylesheet: /protected/assets/index.css</li>
-          <li>Script: /protected/assets/index.js</li>
-        </ul>
-        <p id="timestamp" aria-live="polite"></p>
-      </section>
-    </main>
-    <script src="./assets/index.js" defer></script>
+  <body class="dash-view">
+    <div class="page-frame">
+      <div class="banner-cell">
+        <marquee behavior="scroll" direction="left" scrollamount="4">
+          *** WELCOME TO THE MEMBERS AREA *** BEST VIEWED IN 800x600 *** DO
+          NOT LEAK PASSWORD ***
+        </marquee>
+      </div>
+      <div class="layout-frame">
+        <div class="main-cell">
+          <img
+            class="banner-gif"
+            src="assets/gifs/casino.gif"
+            alt="Casino GIF"
+          />
+          <p class="dash-sub" id="dash-status">Loading...</p>
+          <hr class="rainbow-rule" />
+
+          <section class="section-frame">
+            <h2 class="section-title">☆ Photo Gallery ☆</h2>
+            <div class="section-body">
+              <div class="gallery-grid" id="gallery-grid"></div>
+            </div>
+          </section>
+
+          <hr class="rainbow-rule" />
+
+          <section class="section-frame">
+            <h2 class="section-title">☆ File Downloads ☆</h2>
+            <div class="section-body">
+              <div class="downloads-list" id="downloads-list"></div>
+            </div>
+          </section>
+
+          <hr class="rainbow-rule" />
+
+          <p class="webring">
+            <span class="hit-counter"
+              >Visitors: <span id="hit-count">000042</span></span
+            >
+          </p>
+
+          <p class="footer-badge">
+            <img
+              src="assets/gifs/macmade-blkwtbrdrspin.gif"
+              alt="Made on a Mac"
+            />
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="video-modal" class="video-modal" hidden>
+      <div class="video-modal-inner">
+        <button
+          type="button"
+          id="video-modal-close"
+          class="video-modal-close"
+          aria-label="Close video"
+        >
+          ✕
+        </button>
+        <video
+          id="video-modal-player"
+          class="video-modal-player"
+          controls
+        ></video>
+      </div>
+    </div>
+
+    <script src="script.js" defer></script>
   </body>
 </html>
