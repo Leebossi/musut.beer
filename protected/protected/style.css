@@ -151,11 +151,8 @@ img {
 .download-link-cell {
   display: flex;
   flex: 1 1 auto;
+  justify-content: space-around;
   min-width: 0;
-}
-
-.download-link-cell a {
-  
 }
 
 .download-badge {
