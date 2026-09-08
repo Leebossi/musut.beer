@@ -78,6 +78,15 @@ async function loadGuestbook() {
   }
 }
 
+function formatGuestbookTimestamp(value) {
+  const parsed = new Date(value);
+  if (!value || Number.isNaN(parsed.getTime())) return "";
+  const pad = (n) => String(n).padStart(2, "0");
+  const datePart = `${parsed.getFullYear()}-${pad(parsed.getMonth() + 1)}-${pad(parsed.getDate())}`;
+  const timePart = `${pad(parsed.getHours())}:${pad(parsed.getMinutes())}`;
+  return `${datePart} ${timePart}`;
+}
+
 function renderGuestbook(entries) {
   guestbookListEl.innerHTML = "";
   if (entries.length === 0) {
@@ -98,7 +107,7 @@ function renderGuestbook(entries) {
 
     const dateEl = document.createElement("span");
     dateEl.className = "guestbook-date";
-    dateEl.textContent = entry.date || "";
+    dateEl.textContent = formatGuestbookTimestamp(entry.createdAt);
 
     headerEl.append(nameEl, dateEl);
 

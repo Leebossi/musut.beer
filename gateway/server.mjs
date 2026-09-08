@@ -32,7 +32,7 @@ async function initGuestbookDb() {
   mkdirSync(dirname(GUESTBOOK_DB_PATH), { recursive: true });
   return JSONFilePreset(GUESTBOOK_DB_PATH, {
     entries: [
-      { name: "lerz", message: "musut ens vuonna 10v", date: "2026-09-08" },
+      { name: "lerz", message: "musut ens vuonna 10v", createdAt: "2026-09-08T13:20:00.000Z" },
     ],
     visitCount: 0
   });
@@ -176,8 +176,11 @@ async function handleGuestbookList(req, res) {
   }
 
   const db = await guestbookDbReady;
+  const entries = [...db.data.entries].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
   res.writeHead(200, { "content-type": "application/json" });
-  res.end(JSON.stringify({ entries: db.data.entries }));
+  res.end(JSON.stringify({ entries }));
 }
 
 async function handleGuestbookCreate(req, res) {
@@ -203,12 +206,15 @@ async function handleGuestbookCreate(req, res) {
     return;
   }
 
-  const entry = { ...sanitized, date: new Date().toISOString().slice(0, 10) };
+  const entry = { ...sanitized, createdAt: new Date().toISOString() };
 
   const db = await guestbookDbReady;
   db.data.entries.push(entry);
   if (db.data.entries.length > GUESTBOOK_MAX_ENTRIES) {
-    db.data.entries = db.data.entries.slice(-GUESTBOOK_MAX_ENTRIES);
+    db.data.entries = db.data.entries
+      .slice()
+      .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+      .slice(-GUESTBOOK_MAX_ENTRIES);
   }
   await db.write();
 
