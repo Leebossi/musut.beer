@@ -48,32 +48,40 @@ function updateCountdown() {
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
-if (form && statusEl && protectedLink) {
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+async function attemptUnlock(passphrase) {
+  statusEl.textContent = "Verifying...";
+  protectedLink.hidden = true;
 
-    const formData = new FormData(form);
-    const passphrase = String(formData.get("passphrase") || "");
+  try {
+    const response = await fetch("/api/unlock", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ passphrase })
+    });
 
-    statusEl.textContent = "Verifying...";
-    protectedLink.hidden = true;
-
-    try {
-      const response = await fetch("/api/unlock", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ passphrase })
-      });
-
-      if (!response.ok) {
-        statusEl.textContent = "Invalid passphrase.";
-        return;
-      }
-
-      statusEl.textContent = "Unlocked. Redirecting...";
-      window.location.href = protectedLink.href;
-    } catch (error) {
-      statusEl.textContent = "Unlock request failed. Try again.";
+    if (!response.ok) {
+      statusEl.textContent = "Invalid passphrase.";
+      return;
     }
+
+    statusEl.textContent = "Unlocked. Redirecting...";
+    window.location.href = protectedLink.href;
+  } catch (error) {
+    statusEl.textContent = "Unlock request failed. Try again.";
+  }
+}
+
+if (form && statusEl && protectedLink) {
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    attemptUnlock(String(formData.get("passphrase") || ""));
   });
+
+  // Allow ?passphrase=... links to auto-unlock; strip it from the URL immediately so it isn't left in history.
+  const urlPassphrase = new URLSearchParams(window.location.search).get("passphrase");
+  if (urlPassphrase) {
+    window.history.replaceState({}, "", window.location.pathname);
+    attemptUnlock(urlPassphrase);
+  }
 }
