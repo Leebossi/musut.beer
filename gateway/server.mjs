@@ -356,7 +356,14 @@ function copySafeHeaders(upstreamHeaders) {
   const out = {};
   for (const [key, value] of upstreamHeaders.entries()) {
     const lowered = key.toLowerCase();
-    if (lowered === "set-cookie" || lowered === "transfer-encoding" || lowered === "connection") {
+    // fetch() already decompresses the body, so the original encoding/length no longer apply
+    if (
+      lowered === "set-cookie" ||
+      lowered === "transfer-encoding" ||
+      lowered === "connection" ||
+      lowered === "content-encoding" ||
+      lowered === "content-length"
+    ) {
       continue;
     }
     out[key] = value;
