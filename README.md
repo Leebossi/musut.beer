@@ -36,7 +36,8 @@ Then any one of those words will unlock the site.
 ### Test endpoints
 
 - Public page: `http://localhost:8080/`
-- Protected resource after unlock: `http://localhost:8080/protected/index.html` (dashboard with gallery + downloads)
+- Protected resource after unlock: `http://localhost:8080/protected/index.html` (dashboard with guestbook + downloads)
+- Guestbook API (requires the unlock cookie): `GET/POST http://localhost:8080/api/guestbook`
 
 ### Stop
 
@@ -52,3 +53,4 @@ docker compose down
 - Prefer `PASSPHRASE_HASH` over plaintext passphrases.
 - Set `PROTECTED_ORIGIN=http://127.0.0.1:8081` in production so the gateway fetches protected files from the internal nginx origin instead of recursively calling the public `/protected/*` route.
 - Deploys now sync the `protected/` directory to `/var/www/musut.beer/shared/protected-origin` for that internal origin.
+- Set `GUESTBOOK_DB_PATH` to a path under the gateway's `shared/` directory (e.g. `/opt/musut-gateway/shared/guestbook.json`) so guestbook entries survive deploys — the gateway release directory is wiped and replaced on every deploy.
