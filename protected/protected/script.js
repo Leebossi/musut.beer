@@ -114,16 +114,63 @@ function renderDownloads(items) {
     badgeCell.append(icon, badge);
 
     const linkCell = document.createElement("td");
+
+    if (resolvedType === "video" || resolvedType === "mp4") {
+      const watchLink = document.createElement("a");
+      watchLink.href = item.file;
+      watchLink.textContent = "▶ Watch";
+      watchLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        openVideoModal(item.file);
+      });
+      linkCell.append(watchLink, document.createTextNode(" | "));
+    }
+
     const link = document.createElement("a");
     link.href = item.file;
     link.download = "";
-    link.textContent = item.title || item.file;
+    const downloadIcon = document.createElement("img");
+    downloadIcon.className = "download-link-icon";
+    downloadIcon.src = "assets/img/download.png";
+    downloadIcon.alt = "Download";
+    link.append(downloadIcon, document.createTextNode(item.title || item.file));
     linkCell.append(link);
 
     row.append(badgeCell, linkCell);
     downloadsEl.append(row);
   }
 }
+
+const videoModalEl = document.getElementById("video-modal");
+const videoModalPlayerEl = document.getElementById("video-modal-player");
+const videoModalCloseEl = document.getElementById("video-modal-close");
+
+function openVideoModal(src) {
+  if (!videoModalEl || !videoModalPlayerEl) return;
+  videoModalPlayerEl.src = src;
+  videoModalEl.hidden = false;
+  videoModalPlayerEl.play().catch(() => {});
+}
+
+function closeVideoModal() {
+  if (!videoModalEl || !videoModalPlayerEl) return;
+  videoModalPlayerEl.pause();
+  videoModalPlayerEl.removeAttribute("src");
+  videoModalPlayerEl.load();
+  videoModalEl.hidden = true;
+}
+
+if (videoModalCloseEl) {
+  videoModalCloseEl.addEventListener("click", closeVideoModal);
+}
+if (videoModalEl) {
+  videoModalEl.addEventListener("click", (event) => {
+    if (event.target === videoModalEl) closeVideoModal();
+  });
+}
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeVideoModal();
+});
 
 loadLibrary();
 

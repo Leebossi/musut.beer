@@ -13,6 +13,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 17px;
   color: #000080;
   background-color: #000033;
   background-image: url("assets/gifs/BACKGROUNDanimatedchangingcolorstars.gif");
@@ -25,7 +26,7 @@ img {
 }
 
 .page-table {
-  width: 780px;
+  width: 960px;
   max-width: 100%;
   margin: 12px auto;
   background: #c0c0c0;
@@ -36,8 +37,8 @@ img {
   background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #ff00ff, #ff0000);
   color: #000000;
   font-weight: bold;
-  font-size: 14px;
-  padding: 4px 0;
+  font-size: 18px;
+  padding: 8px 0;
   border-bottom: 2px solid #000000;
 }
 
@@ -48,14 +49,14 @@ img {
 
 .main-cell {
   background: #ffffff url("data:image/gif;base64,R0lGODlhCAAIAIAAAP///wAAACH5BAEAAAAALAAAAAAIAAgAAAIIhI+py+0PYysAOw==") repeat;
-  padding: 16px;
+  padding: 24px;
 }
 
 .blink-title {
   text-align: center;
-  font-size: 28px;
+  font-size: 40px;
   color: #ff00ff;
-  text-shadow: 2px 2px 0 #000080;
+  text-shadow: 3px 3px 0 #000080;
   margin: 4px 0;
 }
 
@@ -67,15 +68,16 @@ img {
 .dash-sub {
   text-align: center;
   font-weight: bold;
+  font-size: 16px;
   color: #008000;
-  margin: 6px 0 12px;
+  margin: 6px 0 16px;
 }
 
 .rainbow-rule {
   border: none;
-  height: 4px;
+  height: 5px;
   background: repeating-linear-gradient(90deg, #ff0000 0 10px, #ffff00 10px 20px, #00ff00 20px 30px, #00ffff 30px 40px, #ff00ff 40px 50px);
-  margin: 14px 0;
+  margin: 18px 0;
 }
 
 .section-table {
@@ -87,10 +89,10 @@ img {
   background: #000080;
   color: #ffff00;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 20px;
   text-align: center;
-  padding: 4px;
-  letter-spacing: 1px;
+  padding: 8px;
+  letter-spacing: 1.2px;
 }
 
 .gallery-grid {
@@ -102,12 +104,12 @@ img {
   vertical-align: top;
   border: 2px inset #808080;
   background: #ffffff;
-  padding: 6px;
+  padding: 10px;
 }
 
 .gallery-item img {
-  width: 120px;
-  height: 120px;
+  width: 170px;
+  height: 170px;
   max-width: 100%;
   object-fit: cover;
   border: 3px double #000080;
@@ -115,9 +117,9 @@ img {
 
 .gallery-caption {
   display: block;
-  font-size: 11px;
+  font-size: 13px;
   color: #800080;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .downloads-list {
@@ -126,7 +128,8 @@ img {
 
 .download-item td {
   border-bottom: 1px dashed #808080;
-  padding: 6px 4px;
+  padding: 10px 6px;
+  font-size: 15px;
 }
 
 .download-badge {
@@ -135,22 +138,31 @@ img {
   background: #ff0000;
   color: #ffffff;
   font-weight: bold;
-  font-size: 10px;
-  padding: 2px 6px;
+  font-size: 12px;
+  padding: 3px 8px;
 }
 
 .download-icon {
   display: inline-block;
-  width: 16px;
-  height: 16px;
-  font-size: 16px;
-  line-height: 16px;
-  margin-right: 4px;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  line-height: 20px;
+  margin-right: 6px;
   vertical-align: middle;
 }
 
 img.download-icon {
   object-fit: contain;
+}
+
+.download-link-icon {
+  display: inline-block;
+  width: 5rem;
+  height: 100%;
+  object-fit: contain;
+  margin-right: 4px;
+  vertical-align: middle;
 }
 
 .download-item a {
@@ -163,10 +175,53 @@ img.download-icon {
   color: #551a8b;
 }
 
+.video-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 20, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.video-modal[hidden] {
+  display: none;
+}
+
+.video-modal-inner {
+  position: relative;
+  width: min(90vw, 900px);
+  background: #c0c0c0;
+  border: 3px outset #ffffff;
+  padding: 10px;
+}
+
+.video-modal-player {
+  display: block;
+  width: 100%;
+  max-height: 80vh;
+  background: #000000;
+}
+
+.video-modal-close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 28px;
+  height: 28px;
+  border: 2px outset #ff0000;
+  background: #ff0000;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+}
+
 .webring {
   text-align: center;
-  font-size: 12px;
-  margin-top: 16px;
+  font-size: 14px;
+  margin-top: 20px;
 }
 
 .back-link {
@@ -176,17 +231,19 @@ img.download-icon {
 
 .hit-counter {
   font-family: "Courier New", monospace;
+  font-size: 15px;
   background: #000000;
   color: #00ff00;
-  padding: 2px 6px;
+  padding: 3px 8px;
   border: 2px inset #808080;
 }
 
 .under-construction {
   text-align: center;
   font-weight: bold;
+  font-size: 15px;
   color: #ff0000;
-  margin-top: 12px;
+  margin-top: 14px;
 }
 
 .footer-badge {
