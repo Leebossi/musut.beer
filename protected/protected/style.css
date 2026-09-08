@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Trebuchet+MS&display=swap");
 
+* {
+  box-sizing: border-box;
+}
+
 html {
   min-height: 100%;
 }
@@ -7,6 +11,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
   font-family: "Trebuchet MS", Verdana, sans-serif;
   color: #000080;
   background-color: #000033;
@@ -14,8 +19,14 @@ body {
   background-repeat: repeat;
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 .page-table {
   width: 780px;
+  max-width: 100%;
   margin: 12px auto;
   background: #c0c0c0;
   border: 3px outset #ffffff;
@@ -46,6 +57,11 @@ body {
   color: #ff00ff;
   text-shadow: 2px 2px 0 #000080;
   margin: 4px 0;
+}
+
+.banner-gif {
+  display: block;
+  margin: 4px auto;
 }
 
 .dash-sub {
@@ -92,6 +108,7 @@ body {
 .gallery-item img {
   width: 120px;
   height: 120px;
+  max-width: 100%;
   object-fit: cover;
   border: 3px double #000080;
 }
@@ -139,6 +156,7 @@ img.download-icon {
 .download-item a {
   color: #0000ee;
   font-weight: bold;
+  word-break: break-word;
 }
 
 .download-item a:visited {
@@ -194,5 +212,21 @@ img.download-icon {
 
   .blink-title {
     font-size: 20px;
+  }
+
+  .gallery-grid,
+  .gallery-grid tr {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .gallery-item {
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .gallery-item img {
+    width: 90px;
+    height: 90px;
   }
 }
