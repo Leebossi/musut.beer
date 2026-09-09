@@ -14,6 +14,15 @@ body {
   font-size: 17px;
   color: #000080;
   background-color: #000033;
+}
+
+/* fixed to the visual viewport so mobile overscroll/rubber-banding can't reveal the body's background-color past the edges */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: #000033;
   background-image: url("assets/gifs/BACKGROUNDanimatedchangingcolorstars.gif");
   background-repeat: repeat;
 }
