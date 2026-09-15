@@ -34,7 +34,7 @@ img {
 
 .page-frame {
   width: 960px;
-  max-width: 100%;
+  max-width: 90vw;
   margin: 12px auto;
   background: #c0c0c0;
   border: 3px outset #ffffff;
