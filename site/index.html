@@ -21,19 +21,17 @@
       <section class="card auth-card" id="unlock-card" hidden>
         <img class="auth-hero" src="/assets/erottaja_bg.png" alt="erottaja" />
         <h1>SEIS!</h1>
-        <div class="countdown" id="countdown" aria-live="polite">
-          <p class="countdown-time">Syötä salasana</p>
-        </div>
         <form id="unlock-form">
           <label for="passphrase">Kenelle ei tarjoilla enään?</label>
           <input
             type="text"
             id="passphrase"
             name="passphrase"
+            placeholder="Vastaus"
             autocomplete="off"
             required
           />
-          <button type="submit">Unlock</button>
+          <button type="submit">Avaa</button>
         </form>
         <p id="status" aria-live="polite"></p>
         <a id="protected-link" href="/protected/index.html" hidden></a>
