@@ -199,6 +199,7 @@ async function handleGuestbookList(req, res) {
   }
 
   const db = await getGuestbookDb();
+  await db.read(); // reflect any manual edits made to the file on disk
   const entries = [...db.data.entries].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
@@ -232,6 +233,7 @@ async function handleGuestbookCreate(req, res) {
   const entry = { ...sanitized, createdAt: new Date().toISOString() };
 
   const db = await getGuestbookDb();
+  await db.read(); // pick up any manual edits made to the file on disk since last load
   db.data.entries.push(entry);
   if (db.data.entries.length > GUESTBOOK_MAX_ENTRIES) {
     db.data.entries = db.data.entries
@@ -253,6 +255,7 @@ async function handleVisitIncrement(req, res) {
   }
 
   const db = await getGuestbookDb();
+  await db.read(); // pick up any manual edits made to the file on disk since last load
   db.data.visitCount = (db.data.visitCount || 0) + 1;
   await db.write();
 
