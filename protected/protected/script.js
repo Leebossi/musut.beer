@@ -178,6 +178,12 @@ function renderDownloads(items) {
       const watchLink = document.createElement("a");
       watchLink.href = item.file;
       watchLink.textContent = "▶ Watch " + (item.title || item.file);
+      watchLink.addEventListener("mouseenter", () => preloadVideo(item.file));
+      watchLink.addEventListener("focus", () => preloadVideo(item.file));
+      // touchstart fires just ahead of click, giving mobile taps a head start too
+      watchLink.addEventListener("touchstart", () => preloadVideo(item.file), {
+        passive: true,
+      });
       watchLink.addEventListener("click", (event) => {
         event.preventDefault();
         openVideoModal(item.file);
@@ -198,24 +204,39 @@ function renderDownloads(items) {
     row.append(badgeCell, linkCell);
     downloadsEl.append(row);
   }
+
+  // warm the shared video element as soon as the list renders, not just on hover/tap
+  const firstVideo = items.find((item) => {
+    const resolvedType = item.type || extensionType(item.file);
+    return resolvedType === "video" || resolvedType === "mp4";
+  });
+  if (firstVideo) preloadVideo(firstVideo.file);
 }
 
 const videoModalEl = document.getElementById("video-modal");
 const videoModalPlayerEl = document.getElementById("video-modal-player");
 const videoModalCloseEl = document.getElementById("video-modal-close");
 
+// Sets the src ahead of time (e.g. on hover) so the browser can start buffering before the modal opens.
+function preloadVideo(src) {
+  if (!videoModalPlayerEl || videoModalPlayerEl.dataset.src === src) return;
+  videoModalPlayerEl.dataset.src = src;
+  videoModalPlayerEl.src = src;
+  videoModalPlayerEl.load();
+}
+
 function openVideoModal(src) {
   if (!videoModalEl || !videoModalPlayerEl) return;
-  videoModalPlayerEl.src = src;
+  preloadVideo(src);
   videoModalEl.hidden = false;
+  videoModalPlayerEl.currentTime = 0;
   videoModalPlayerEl.play().catch(() => {});
 }
 
 function closeVideoModal() {
   if (!videoModalEl || !videoModalPlayerEl) return;
+  // Keep the src intact so reopening the same video doesn't refetch it.
   videoModalPlayerEl.pause();
-  videoModalPlayerEl.removeAttribute("src");
-  videoModalPlayerEl.load();
   videoModalEl.hidden = true;
 }
 
