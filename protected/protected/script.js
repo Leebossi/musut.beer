@@ -227,9 +227,11 @@ function preloadVideo(src) {
 
 function openVideoModal(src) {
   if (!videoModalEl || !videoModalPlayerEl) return;
+  const isNewVideo = videoModalPlayerEl.dataset.src !== src;
   preloadVideo(src);
   videoModalEl.hidden = false;
-  videoModalPlayerEl.currentTime = 0;
+  // only rewind for a different video; reopening the same one resumes where it left off
+  if (isNewVideo) videoModalPlayerEl.currentTime = 0;
   videoModalPlayerEl.play().catch(() => {});
 }
 
